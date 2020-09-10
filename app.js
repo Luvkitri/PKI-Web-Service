@@ -17,7 +17,7 @@ app.get('/tables', async (req, res) => {
             `SELECT table_name FROM information_schema.tables 
             WHERE table_schema='public' AND table_type='BASE TABLE';`
         );
-        
+
         res.json(tables.rows);
     } catch (error) {
         console.error(error.message);
@@ -39,6 +39,19 @@ app.post('/table', async (req, res) => {
 });
 
 // Post query
+app.post('/query', async (req, res) => {
+    try {
+        const { query } = req.body;
+        console.log(query);
+        const query_result = await pool.query(
+            query
+        );
+
+        res.json(query_result.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+});
 
 
 const port = process.env.PORT || 3000;
