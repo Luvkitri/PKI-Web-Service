@@ -13,28 +13,28 @@ app.get('/', (req, res) => {
 // Get all tables
 app.get('/tables', async (req, res) => {
     try {
-        let tables = await pool.query(
+        const tables = await pool.query(
             `SELECT table_name FROM information_schema.tables 
             WHERE table_schema='public' AND table_type='BASE TABLE';`
         );
         
         res.json(tables.rows);
-    } catch (err) {
-        console.error(err.message);
+    } catch (error) {
+        console.error(error.message);
     }
 });
 
 // Post table content
 app.post('/table', async (req, res) => {
     try {
-        const table_name = req.body;
-        let table = await pool.query(
-            `SELECT * FROM ${table_name}`
+        const { table_name } = req.body;
+        const table_records = await pool.query(
+            `SELECT * FROM ${[table_name]}`
         );
 
-        res.json(table.rows);
-    } catch (err) {
-        console.error(err.message);
+        res.json(table_records.rows);
+    } catch (error) {
+        console.error(error.message);
     }
 });
 
