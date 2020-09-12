@@ -1,8 +1,15 @@
 const express = require('express');
-const pool = require('./db.js');
+const dotenv = require('dotenv');
+const pool = require('./config/db.js');
+const morgan = require('morgan');
 const app = express();
 
+dotenv.config({ path: './config/config.env' });
 app.use(express.json());
+
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev'));
+}
 
 app.get('/', (req, res) => {
     res.send('Hello World!!!');
@@ -124,5 +131,6 @@ app.post('/view/edit', async (req, res) => {
     }
 });
 
-const port = process.env.PORT || 3000;
+// Server start
+const port = process.env.PORT;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
