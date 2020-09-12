@@ -54,8 +54,36 @@ app.post('/query', async (req, res) => {
         res.json(error.message);
     }
 });
+
+// Post new record
+app.post('/view/insert', async (req, res) => {
+    try {
+        const recordData = req.body;
+        let fields = "";
+        let data = "";
+
+        for (const [key, value] of Object.entries(recordData.content)) {
+            fields += `${key}, `;
+            if (key == "date_of_birth") {
+                data += `DATE '${value}', `; 
+            } else {
+                data += `'${value}', `;  
+            }
+        }
+
+        fields = fields.slice(0, -2);
+        data = data.slice(0, -2);
+
+        const insertResult = await pool.query(
+            `INSERT INTO ${recordData.table} (${fields}) VALUES(${data}) RETURNING *;`
+        );
+        
+        res.json(insertResult.rows);
     } catch (error) {
         console.error(error.message);
+        res.json(error.message);
+    }
+});
     }
 });
 
