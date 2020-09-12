@@ -21,6 +21,7 @@ app.get('/tables', async (req, res) => {
         res.json(tables.rows);
     } catch (error) {
         console.error(error.message);
+        res.json(error.message);
     }
 });
 
@@ -29,12 +30,13 @@ app.post('/table', async (req, res) => {
     try {
         const { table_name } = req.body;
         const table_records = await pool.query(
-            `SELECT * FROM ${[table_name]}`
+            `SELECT * FROM ${[table_name]};`
         );
 
         res.json(table_records.rows);
     } catch (error) {
         console.error(error.message);
+        res.json(error.message);
     }
 });
 
@@ -42,12 +44,16 @@ app.post('/table', async (req, res) => {
 app.post('/query', async (req, res) => {
     try {
         const { query } = req.body;
-        console.log(query);
-        const query_result = await pool.query(
+        const queryResult = await pool.query(
             query
         );
 
-        res.json(query_result.rows);
+        res.json(queryResult.rows);
+    } catch (error) {
+        console.error(error.message);
+        res.json(error.message);
+    }
+});
     } catch (error) {
         console.error(error.message);
     }
