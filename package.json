@@ -4,7 +4,8 @@
   "description": "PKI final project.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app",
+    "dev": "nodemon app"
   },
   "repository": {
     "type": "git",
@@ -17,8 +18,10 @@
   },
   "homepage": "https://github.com/Luvkitri/PKI-Web-Service#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "pg": "^8.3.3"
-  }
+  },
+  "devDependencies": {}
 }
