@@ -101,6 +101,28 @@ app.post('/view/delete', async (req, res) => {
     }
 });
 
+// Edit record
+app.post('/view/edit', async (req, res) => {
+    try {
+        const updateData = req.body;
+        setArguments = "";
+
+        for (const [key, value] of Object.entries(updateData.edited)) {
+            setArguments += `${key} = '${value}', `;
+        }
+
+        setArguments = setArguments.slice(0, -2);
+
+        const editResult = await pool.query(
+            `UPDATE ${updateData.table} SET ${setArguments} WHERE id = ${updateData.id};`
+        );
+
+        res.json(`Record with id: ${updateData.id} was updated in ${updateData.table}`);
+    } catch (error) {
+        console.error(error.message);
+        res.json(error.message);
+    }
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
