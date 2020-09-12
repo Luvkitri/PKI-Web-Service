@@ -84,6 +84,20 @@ app.post('/view/insert', async (req, res) => {
         res.json(error.message);
     }
 });
+
+// Delete record
+app.post('/view/delete', async (req, res) => {
+    try {
+        const deleteData = req.body;
+
+        const deleteResult = await pool.query(
+            `DELETE FROM ${deleteData.table} WHERE id = ${deleteData.id};`    
+        );
+
+        res.json(`Record with id: ${deleteData.id} was deleted from ${deleteData.table}`);
+    } catch(error) {
+        console.error(error.message);
+        res.json(error.message);
     }
 });
 
