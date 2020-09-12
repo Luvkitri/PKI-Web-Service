@@ -1,21 +1,26 @@
 const express = require('express');
+const exphbs = require('express-handlebars');
 const dotenv = require('dotenv');
 const pool = require('./config/db.js');
 const morgan = require('morgan');
+
+dotenv.config({ path: "./config/.env" });
+
 const app = express();
 
-dotenv.config({ path: './config/.env' });
-app.use(express.json());
+// Handlebars
+app.engine('.hbs', exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.set('view engine', '.hbs');
 
+// Logging
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-app.get('/', (req, res) => {
-    res.send('Hello World!!!');
-});
+app.use(express.json());
 
 // Routes
+app.use('/', require('./routes/index'));
 
 // Get all tables
 app.get('/tables', async (req, res) => {
