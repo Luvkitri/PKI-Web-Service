@@ -4,7 +4,7 @@ const pool = require('./config/db.js');
 const morgan = require('morgan');
 const app = express();
 
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: './config/.env' });
 app.use(express.json());
 
 if (process.env.NODE_ENV === 'development') {
