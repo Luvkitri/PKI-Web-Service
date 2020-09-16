@@ -15,7 +15,7 @@ require('./config/passport')(passport);
 
 const app = express();
 
-// * Middleware
+// * MIDDLEWARE
 
 // Handlebars
 app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));

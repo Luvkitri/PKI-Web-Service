@@ -46,11 +46,11 @@ router.post('/table', ensureAuth, async (req, res) => {
 // @route   POST /tables/query
 router.post('/query', ensureAuth, async (req, res) => {
     try {
-        console.log(req.body.query);
         const [result, metadata] = await db.query(req.body.query);
 
         res.render('tables/query', {
             layout: 'main',
+            query: req.body.query,
             displayName: req.user.dataValues.display_name,
             result: metadata
         });
@@ -64,6 +64,8 @@ router.post('/query', ensureAuth, async (req, res) => {
     }
 });
 
+// @desc    Insert record to table
+// @route   POST /tables/insert
 router.post('/insert', ensureAuth, async (req, res) => {
     try {
         let data = JSON.parse(JSON.stringify(req.body));
@@ -78,6 +80,8 @@ router.post('/insert', ensureAuth, async (req, res) => {
     }
 });
 
+// @desc    Remove record by id from table
+// @route   POST /tables/remove
 router.post('/remove', ensureAuth, async (req, res) => {
     try {
         if (models[req.body.table_name] == User) {
@@ -99,13 +103,12 @@ router.post('/remove', ensureAuth, async (req, res) => {
         res.status(201).json('OK');
     } catch (error) {
         console.error(error.message);
-        res.render('errors/500', {
-            displayName: req.user.dataValues.display_name,
-            error: error.message
-        });
+        res.status(500).json(error.message);
     }
 });
 
+// @desc    Edit selected record
+// @route   POST /tables/edit
 router.post('/edit', ensureAuth, async (req, res) => {
     try {
         let data = JSON.parse(JSON.stringify(req.body));
@@ -117,8 +120,6 @@ router.post('/edit', ensureAuth, async (req, res) => {
                 delete data[field];
             }
         }
-
-        console.log(data);
         
         const model = await models[req.body.table_name].update(data, {
             where: {
@@ -129,10 +130,7 @@ router.post('/edit', ensureAuth, async (req, res) => {
         res.status(201).json('OK');
     } catch (error) {
         console.error(error.message);
-        console.error(error.message);
-        res.render('errors/500', {
-            error: error.message
-        });
+        res.status(500).json(error.message);
     }
 });
 
