@@ -63,17 +63,34 @@
                     type: 'POST',
                     url: route,
                     data: formData,
-                    success: function() {
+                    success: function () {
                         window.location.reload();
                     },
                     dataType: 'json'
-                }).fail(function(jqXHR, textStatus, errorThrown) {
+                }).fail(function (jqXHR, textStatus, errorThrown) {
                     alert(jqXHR.responseText);
                 });
 
                 return false;
             });
         });
+
+        $('#home').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/home',
+                data: {
+                    query: '{{query}}'
+                },
+                success: function () {
+                    window.location.href = '/home';
+                },
+                dataType: 'json'
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        });
+
     </script>
 </body>
 
