@@ -98,6 +98,12 @@ router.post('/remove', ensureAuth, async (req, res) => {
                     }
                 });
             } 
+        } else {
+            await models[req.body.table_name].destroy({
+                where: {
+                    id: req.body.tableID
+                }
+            });
         }
         
         res.status(201).json('OK');
