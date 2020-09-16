@@ -1,0 +1,86 @@
+<div class="modal fade bd-example-modal-lg" id="insertModal" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form class="modal-form" id="insertForm">
+                <div class="modal-title">
+                    <h2>Input values for new record</h2>
+                </div>
+                <hr class="solid">
+                <div class="input-container">
+                    <input type="hidden" name="table_name" value="{{tableName}}" />
+                    {{#each table.[0].dataValues}}
+                    {{#ifNotEquals @key 'id created_at'}}
+                    <div class="form-group">
+                        <label>{{@key}}</label>
+                        <input name="{{@key}}" type="text" class="form-control">
+                    </div>
+                    {{/ifNotEquals}}
+                    {{/each}}
+                    <button type="submit" class="btn btn-success home-btn">Insert record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" id="removeModal" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form class="modal-form" id="removeForm">
+                <div class="modal-title">
+                    <h2>Select a record to remove</h2>
+                </div>
+                <hr class="solid">
+                <div class="input-container">
+                    <div class="form-group">
+                        <input type="hidden" name="table_name" value="{{tableName}}" />
+                        <label for="inputID">Pick a record by id</label>
+                        <select name="tableID" class="form-control" id="inputID">
+                            {{#each table}}
+                            <option value="{{this.dataValues.id}}">{{this.dataValues.id}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-danger home-btn">Remove record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" id="editModal" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form class="modal-form" id="editForm">
+                <div class="modal-title">
+                    <h2>Select a record to edit</h2>
+                </div>
+                <hr class="solid">
+                <div class="input-container">
+                    <div class="form-group">
+                        <label for="inputID">Pick a record by id</label>
+                        <select name="tableID" class="form-control" id="inputID">
+                            {{#each table}}
+                            <option value="{{this.dataValues.id}}">{{this.dataValues.id}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <input type="hidden" name="table_name" value="{{tableName}}" />
+                    {{#each table.[0].dataValues}}
+                    {{#ifNotEquals @key 'id created_at'}}
+                    <div class="form-group">
+                        <label>{{@key}}</label>
+                        <input name="{{@key}}" type="text" class="form-control">
+                    </div>
+                    {{/ifNotEquals}}
+                    {{/each}}
+                    <button type="submit" class="btn btn-warning home-btn">Edit record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

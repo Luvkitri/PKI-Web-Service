@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+        integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+        crossorigin="anonymous" />
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+    <title>Home</title>
+
+</head>
+
+<body>
+    {{> _navbar}}
+    {{{body}}}
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                paging: false
+            });
+
+            $('.modal-form').on('submit', function () {
+                let formData = $(this).serialize();
+
+                let route = '/';
+
+                console.log($(this).attr('id'));
+
+                switch ($(this).attr('id')) {
+                    case 'insertForm':
+                        route = '/tables/insert';
+                        break;
+                    case 'removeForm':
+                        route = '/tables/remove';
+                        break;
+                    case 'editForm':
+                        route = '/tables/edit';
+                        break;
+                    default:
+                        route = '/tables/view';
+                }
+
+                console.log(route);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    data: formData,
+                    success: function () {
+                        window.location.reload();
+                    },
+                    dataType: 'json'
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                });
+
+                return false;
+            });
+        });
+
+        $('#home').click(function () {
+            $.ajax({
+                type: 'POST',
+                url: '/home',
+                data: {
+                    query: '{{query}}'
+                },
+                success: function () {
+                    window.location.href = '/home';
+                },
+                dataType: 'json'
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(jqXHR.responseText);
+            });
+        });
+
+    </script>
+</body>
+
+</html>

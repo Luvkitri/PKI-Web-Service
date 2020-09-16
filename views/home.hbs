@@ -1,0 +1,34 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="table-tab" data-toggle="tab" href="#tablePicker" role="tab"
+            aria-controls="profile" aria-selected="false">Get Table</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="query-tab" data-toggle="tab" href="#queryExecutor" role="tab" aria-controls="contact"
+            aria-selected="false">Execute Query</a>
+    </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane active" id="tablePicker" role="tabpanel" aria-labelledby="table-tab">
+        <div class="wrapper">
+            <form method="POST" action="/tables/table" class="homeForm" id="selectForm" enctype="application/form-data">
+                <select name="table" class="custom-select" id="selectTable">
+                    <option value="" disabled="true" selected="true" hidden="true">Select a table</option>
+                    {{#each tables}}
+                    <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+                <input type="submit" class="btn btn-primary home-btn" value="Show table content"></input>
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane" id="queryExecutor" role="tabpanel" aria-labelledby="query-tab">
+        <div class="wrapper">
+            <form method="POST" action="/tables/query" class="homeForm" enctype="application/form-data">
+                <span class="input-group-text">Query</span>
+                <textarea name="query" class="form-control" aria-label="With textarea">{{query}}</textarea>
+                <input type="submit" class="btn btn-primary home-btn" value="Execute query"></input>
+            </form>
+        </div>
+    </div>
+</div>
