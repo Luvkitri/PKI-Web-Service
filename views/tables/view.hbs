@@ -1,0 +1,31 @@
+{{#if table}}
+
+<div class="wrapper">
+    <div class="table-wrapper">
+        <div class="title">
+            <h2>Manage <b>{{tableName}}</b></h2>
+        </div>
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    {{#each table.[0].dataValues}}
+                    <th scope="col">{{@key}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each table}}
+                <tr>
+                    {{#each this.dataValues}}
+                    <td>{{this}}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{else}}
+<p>Pick a table or execute query. Results will be seen here.</p>
+{{/if}}
