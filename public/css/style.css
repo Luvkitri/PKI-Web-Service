@@ -61,6 +61,23 @@ body {
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
 }
 
+.controls {
+    float: left;
+    align-items: initial;
+}
 
-.title {
+a:hover {
+    cursor:pointer;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-title {
+    text-align: center;
+}
+
+.input-container {
+    padding: 20px;
 }

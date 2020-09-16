@@ -10,6 +10,7 @@
         integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
         crossorigin="anonymous" />
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
     <title>Home</title>
 
 </head>
@@ -25,6 +26,55 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                paging: false
+            });
+
+            $('.modal-form').on('submit', function () {
+                let formData = $(this).serialize();
+
+                let route = '/';
+
+                console.log($(this).attr('id'));
+
+                switch ($(this).attr('id')) {
+                    case 'insertForm':
+                        route = '/tables/insert';
+                        break;
+                    case 'removeForm':
+                        route = '/tables/remove';
+                        break;
+                    case 'editForm':
+                        route = '/tables/edit';
+                        break;
+                    default:
+                        route = '/tables/view';
+                }
+
+                console.log(route);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    data: formData,
+                    success: function() {
+                        window.location.reload();
+                    },
+                    dataType: 'json'
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                });
+
+                return false;
+            });
+        });
+    </script>
 </body>
 
 </html>

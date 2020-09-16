@@ -9,8 +9,8 @@ router.get('/', ensureGuest, (req, res) => {
     });
 });
 
-router.get('/sign-in', (req, res) => {
-    res.render('signin', {
+router.get('/failure', (req, res) => {
+    res.render('failure', {
         layout: 'login'
     });
 });
