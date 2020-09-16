@@ -1,0 +1,29 @@
+{{#if result}}
+<div class="wrapper">
+    <div class="table-wrapper">
+        <div class="title">
+            <h2>Query results</h2>
+        </div>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    {{#each result.fields}}
+                    <th scope="col">{{this.name}}</th>
+                    {{/each}}
+                </tr>
+            </thead>
+            <tbody>
+                {{#each result.rows}}
+                <tr>
+                    {{#each this}}
+                    <td>{{this}}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+{{else}}
+<p>Pick a table or execute query. Results will be seen here.</p>
+{{/if}}
