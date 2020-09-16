@@ -61,6 +61,7 @@ body {
     box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
 }
 
-
-.title {
+.controls {
+    float: left;
+    align-items: initial;
 }
