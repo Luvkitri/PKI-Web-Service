@@ -1,28 +1,58 @@
+const path = require('path');
 const express = require('express');
 const exphbs = require('express-handlebars');
+const passport = require('passport');
+const session = require('express-session');
 const dotenv = require('dotenv');
-const pool = require('./config/db.js');
+const db = require('./config/db.js');
 const morgan = require('morgan');
 
-dotenv.config({ path: "./config/.env" });
+// Load env variables
+dotenv.config({ path: './config/.env' });
+
+// Load passport
+require('./config/passport')(passport);
 
 const app = express();
 
+// * Middleware
+
 // Handlebars
-app.engine('.hbs', exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.engine('.hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
+
+// Session
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// Passport
+app.use(passport.initialize());
+app.use(passport.session())
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
+// Static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.json());
+
+// This allows to extrat form-data from POST request
+app.use(express.urlencoded({
+    extended: true
+}));
 
 // Routes
 app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/auth'));
+app.use('/tables', require('./routes/tables'));
 
-// Get all tables
+/* OLD ROUTES
 app.get('/tables', async (req, res) => {
     try {
         const tables = await pool.query(
@@ -37,7 +67,6 @@ app.get('/tables', async (req, res) => {
     }
 });
 
-// Post table content
 app.post('/table', async (req, res) => {
     try {
         const { table_name } = req.body;
@@ -52,7 +81,6 @@ app.post('/table', async (req, res) => {
     }
 });
 
-// Post query
 app.post('/query', async (req, res) => {
     try {
         const { query } = req.body;
@@ -67,16 +95,15 @@ app.post('/query', async (req, res) => {
     }
 });
 
-// Post new record
 app.post('/view/insert', async (req, res) => {
     try {
         const recordData = req.body;
-        let fields = "";
-        let data = "";
+        let fields = '';
+        let data = '';
 
         for (const [key, value] of Object.entries(recordData.content)) {
             fields += `${key}, `;
-            if (key == "date_of_birth") {
+            if (key == 'date_of_birth') {
                 data += `DATE '${value}', `; 
             } else {
                 data += `'${value}', `;  
@@ -97,7 +124,6 @@ app.post('/view/insert', async (req, res) => {
     }
 });
 
-// Delete record
 app.post('/view/delete', async (req, res) => {
     try {
         const deleteData = req.body;
@@ -113,11 +139,10 @@ app.post('/view/delete', async (req, res) => {
     }
 });
 
-// Edit record
 app.post('/view/edit', async (req, res) => {
     try {
         const updateData = req.body;
-        setArguments = "";
+        setArguments = '';
 
         for (const [key, value] of Object.entries(updateData.edited)) {
             setArguments += `${key} = '${value}', `;
@@ -135,6 +160,7 @@ app.post('/view/edit', async (req, res) => {
         res.json(error.message);
     }
 });
+*/
 
 // Server start
 const port = process.env.PORT;
