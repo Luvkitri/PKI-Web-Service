@@ -35,6 +35,10 @@ router.post('/table', ensureAuth, async (req, res) => {
         });
     } catch (error) {
         console.error(error.message);
+        res.render('errors/500', {
+            displayName: req.user.dataValues.display_name,
+            error: error.message
+        });
     }
 });
 
@@ -45,15 +49,91 @@ router.post('/query', ensureAuth, async (req, res) => {
         console.log(req.body.query);
         const [result, metadata] = await db.query(req.body.query);
 
-        console.log(result)
         res.render('tables/query', {
             layout: 'main',
             displayName: req.user.dataValues.display_name,
             result: metadata
         });
+
     } catch (error) {
         console.error(error.message);
+        res.render('errors/500', {
+            displayName: req.user.dataValues.display_name,
+            error: error.message
+        });
     }
-})
+});
+
+router.post('/insert', ensureAuth, async (req, res) => {
+    try {
+        let data = JSON.parse(JSON.stringify(req.body));
+        delete data.table_name;
+
+        const newEntry = models[req.body.table_name].build(data);
+        await newEntry.save(); 
+        res.status(201).json('OK');
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json(error.message);
+    }
+});
+
+router.post('/remove', ensureAuth, async (req, res) => {
+    try {
+        if (models[req.body.table_name] == User) {
+            const userToRemove = await models[req.body.table_name].findAll({
+                where: {
+                    id: req.body.tableID 
+                }
+            });
+            
+            if (req.user.google_id != userToRemove[0].google_id) {
+                await models[req.body.table_name].destroy({
+                    where: {
+                        id: req.body.tableID
+                    }
+                });
+            } 
+        }
+        
+        res.status(201).json('OK');
+    } catch (error) {
+        console.error(error.message);
+        res.render('errors/500', {
+            displayName: req.user.dataValues.display_name,
+            error: error.message
+        });
+    }
+});
+
+router.post('/edit', ensureAuth, async (req, res) => {
+    try {
+        let data = JSON.parse(JSON.stringify(req.body));
+        delete data.table_name;
+        delete data.tableID;
+
+        for (let field in data) {
+            if (data[field] === null || data[field] === 'undefined' || data[field] === '') {
+                delete data[field];
+            }
+        }
+
+        console.log(data);
+        
+        const model = await models[req.body.table_name].update(data, {
+            where: {
+                id: req.body.tableID
+            }
+        });
+
+        res.status(201).json('OK');
+    } catch (error) {
+        console.error(error.message);
+        console.error(error.message);
+        res.render('errors/500', {
+            error: error.message
+        });
+    }
+});
 
 module.exports = router;

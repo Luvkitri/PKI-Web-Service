@@ -35,6 +35,44 @@
             $('#example').DataTable({
                 paging: false
             });
+
+            $('.modal-form').on('submit', function () {
+                let formData = $(this).serialize();
+
+                let route = '/';
+
+                console.log($(this).attr('id'));
+
+                switch ($(this).attr('id')) {
+                    case 'insertForm':
+                        route = '/tables/insert';
+                        break;
+                    case 'removeForm':
+                        route = '/tables/remove';
+                        break;
+                    case 'editForm':
+                        route = '/tables/edit';
+                        break;
+                    default:
+                        route = '/tables/view';
+                }
+
+                console.log(route);
+
+                $.ajax({
+                    type: 'POST',
+                    url: route,
+                    data: formData,
+                    success: function() {
+                        window.location.reload();
+                    },
+                    dataType: 'json'
+                }).fail(function(jqXHR, textStatus, errorThrown) {
+                    alert(jqXHR.responseText);
+                });
+
+                return false;
+            });
         });
     </script>
 </body>

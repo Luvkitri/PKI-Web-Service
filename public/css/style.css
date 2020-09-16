@@ -65,3 +65,19 @@ body {
     float: left;
     align-items: initial;
 }
+
+a:hover {
+    cursor:pointer;
+}
+
+.modal-content {
+    padding: 20px;
+}
+
+.modal-title {
+    text-align: center;
+}
+
+.input-container {
+    padding: 20px;
+}
